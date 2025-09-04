@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Aaradhya • One‑Page CSS Project</title>
+  <style>
+    /* ==========================
+       Basic Reset & Variables
+       ========================== */
+    *, *::before, *::after { box-sizing: border-box; }
+    :root{
+      --bg: #0b1220;                /* dark navy */
+      --bg-2: #0f1628;              /* slightly lighter */
+      --text: #eaf0ff;              /* near white */
+      --muted: #a9b3d6;             
+      --accent: #5b7cfa;            /* royal-ish blue */
+      --accent-2: #c2b4ff;          /* lavender */
+      --card: rgba(255,255,255,0.06);
+      --card-border: rgba(255,255,255,0.12);
+      --shadow: 0 10px 30px rgba(0,0,0,0.35);
+      --radius-lg: 20px;
+      --radius-xl: 28px;
+      --maxw: 1100px;
+      --pad: clamp(16px, 2vw, 24px);
+      --hero-h: min(82vh, 760px);
+    }
+
+    @media (prefers-color-scheme: light){
+      :root{
+        --bg: #ffffff;
+        --bg-2: #f4f6ff;
+        --text: #0f1530;
+        --muted: #4a5375;
+        --card: rgba(10, 20, 60, 0.06);
+        --card-border: rgba(10,20,60,0.10);
+        --shadow: 0 10px 30px rgba(14,26,68,0.18);
+      }
+      body { background: linear-gradient(180deg, #ffffff 0%, #f3f6ff 100%); }
+    }
+
+    html, body { height: 100%; }
+    body{
+      margin: 0; font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+      color: var(--text);
+      background: radial-gradient(1200px 800px at 20% 10%, rgba(91,124,250,.18), transparent 60%),
+                  radial-gradient(900px 700px at 80% 20%, rgba(194,180,255,.20), transparent 60%),
+                  linear-gradient(180deg, var(--bg) 0%, var(--bg-2) 100%);
+      line-height: 1.6;
+    }
+
+    a { color: inherit; text-decoration: none; }
+    .container{ width: min(100% - 2*var(--pad), var(--maxw)); margin-inline: auto; }
+
+    /* ==========================
+       Header / Nav
+       ========================== */
+    header{
+      position: sticky; top: 0; z-index: 50;
+      backdrop-filter: saturate(180%) blur(10px);
+      background: linear-gradient(180deg, rgba(10,15,35,.7), rgba(10,15,35,.45));
+      border-bottom: 1px solid var(--card-border);
+    }
+    .nav{ display: flex; align-items: center; justify-content: space-between; padding: 14px 0; }
+    .brand{ display: inline-flex; gap: 10px; align-items: center; font-weight: 800; letter-spacing: .3px; }
+    .logo{
+      width: 38px; height: 38px; border-radius: 12px; display: grid; place-items: center;
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      box-shadow: var(--shadow);
+    }
+    .nav a.link{ opacity:.85; padding: 8px 12px; border-radius: 10px; }
+    .nav a.link:hover{ opacity:1; background: var(--card); }
+    .cta{ padding: 10px 16px; border-radius: 999px; border: 1px solid var(--card-border); background: linear-gradient(135deg, rgba(91,124,250,.2), rgba(194,180,255,.2)); transition: transform .2s ease, box-shadow .2s ease; }
+    .cta:hover{ transform: translateY(-2px); box-shadow: var(--shadow); }
+
+    /* ==========================
+       Hero Section
+       ========================== */
+    .hero{ min-height: var(--hero-h); display: grid; place-items: center; position: relative; overflow: hidden; }
+    .hero .inner{ display:grid; gap: 26px; text-align: center; padding: 60px 0; }
+    .tag{ display:inline-flex; align-items:center; gap:10px; padding: 6px 10px; border-radius: 999px; background: var(--card); border: 1px solid var(--card-border); font-size: 13px; letter-spacing:.2px; }
+    .title{ font-size: clamp(32px, 6vw, 64px); line-height: 1.05; font-weight: 900; margin: 0; }
+    .title .grad{ background: linear-gradient(90deg, var(--accent), var(--accent-2)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+    .subtitle{ max-width: 70ch; margin: 0 auto; color: var(--muted); font-size: clamp(15px, 2.2vw, 18px); }
+    .hero-actions{ display:flex; gap: 12px; justify-content:center; flex-wrap: wrap; margin-top: 6px; }
+
+    .btn{ padding: 12px 18px; border-radius: 14px; border: 1px solid var(--card-border); background: var(--card); cursor: pointer; font-weight: 600; letter-spacing: .2px; transition: transform .2s ease, box-shadow .2s ease, background .2s ease; }
+    .btn.primary{ background: linear-gradient(135deg, var(--accent), var(--accent-2)); color: #0b0f1c; }
+    .btn:hover{ transform: translateY(-2px); box-shadow: var(--shadow); }
+
+    /* Floating orbs for visual flair */
+    .orb{ position: absolute; border-radius: 999px; filter: blur(40px); opacity: .35; animation: float 10s ease-in-out infinite; }
+    .orb.one{ width: 240px; height: 240px; left: -60px; top: 120px; background: radial-gradient(circle at 30% 30%, var(--accent), transparent 60%); }
+    .orb.two{ width: 300px; height: 300px; right: -80px; bottom: -40px; background: radial-gradient(circle at 70% 60%, var(--accent-2), transparent 60%); animation-delay: -3s; }
+    @keyframes float{ 0%{ transform: translateY(0) } 50%{ transform: translateY(-14px) } 100%{ transform: translateY(0) } }
+
+    /* ==========================
+       Features Grid (Glass cards)
+       ========================== */
+    section{ padding: 64px 0; }
+    .grid{ display: grid; grid-template-columns: repeat(12, 1fr); gap: 16px; }
+    .card{ grid-column: span 4; background: var(--card); border: 1px solid var(--card-border); border-radius: var(--radius-xl); padding: 24px; box-shadow: var(--shadow); transition: transform .25s ease, box-shadow .25s ease, background .25s ease; }
+    .card:hover{ transform: translateY(-6px); box-shadow: 0 18px 50px rgba(0,0,0,.3); }
+    .card h3{ margin: 8px 0 6px; font-size: 22px; }
+    .card p{ margin: 0; color: var(--muted); }
+    .icon{ width: 40px; height: 40px; border-radius: 12px; display:grid; place-items:center; background: linear-gradient(135deg, rgba(91,124,250,.35), rgba(194,180,255,.35)); border: 1px solid var(--card-border); }
+
+    /* ==========================
+       Gallery Section
+       ========================== */
+    .gallery{ display: grid; grid-template-columns: repeat(12, 1fr); gap: 12px; }
+    .shot{ grid-column: span 3; aspect-ratio: 4/3; border-radius: 18px; overflow: hidden; border: 1px solid var(--card-border); position: relative; }
+    .shot::before{ content:""; position: absolute; inset: 0; background: linear-gradient(135deg, rgba(91,124,250,.25), rgba(194,180,255,.2)); mix-blend-mode: overlay; }
+    .shot div{ width: 100%; height: 100%; background:
+      radial-gradient(180px 140px at 30% 30%, rgba(91,124,250,.6), transparent 40%),
+      radial-gradient(160px 120px at 70% 70%, rgba(194,180,255,.6), transparent 40%),
+      linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.02));
+    }
+
+    /* ==========================
+       Callout / CTA block
+       ========================== */
+    .cta-block{ background: linear-gradient(135deg, rgba(91,124,250,.18), rgba(194,180,255,.18)); border: 1px solid var(--card-border); border-radius: 26px; padding: 26px; text-align: center; box-shadow: var(--shadow); }
+
+    /* ==========================
+       Footer
+       ========================== */
+    footer{ padding: 36px 0; color: var(--muted); text-align: center; }
+
+    /* ==========================
+       Responsive tweaks
+       ========================== */
+    @media (max-width: 960px){
+      .card{ grid-column: span 6; }
+      .shot{ grid-column: span 4; }
+    }
+    @media (max-width: 640px){
+      .card{ grid-column: span 12; }
+      .shot{ grid-column: span 6; }
+      .nav .links{ display: none; }
+      .hero .inner{ padding: 40px 0; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container nav">
+      <a class="brand" href="#">
+        <span class="logo" aria-hidden="true">
+          <!-- Simple inline logo -->
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12 3L20.6603 8V16L12 21L3.33975 16V8L12 3Z" stroke="#0b0f1c" stroke-width="1.5"/>
+            <path d="M12 7.2L16.8 10V14L12 16.8L7.2 14V10L12 7.2Z" fill="#0b0f1c"/>
+          </svg>
+        </span>
+        <span>Aaradhya Studio</span>
+      </a>
+      <div class="links">
+        <a class="link" href="#features">Features</a>
+        <a class="link" href="#gallery">Gallery</a>
+        <a class="link" href="#contact">Contact</a>
+      </div>
+      <a class="cta" href="#contact">Get Started</a>
+    </div>
+  </header>
+
+  <section class="hero" aria-labelledby="herotitle">
+    <span class="orb one"></span>
+    <span class="orb two"></span>
+    <div class="container inner">
+      <span class="tag">✨ CSS‑Only • Responsive • Glassmorphism</span>
+      <h1 class="title" id="herotitle">Build fast with <span class="grad">Royal Blue & Lavender</span> vibes.</h1>
+      <p class="subtitle">A single clean page showing modern CSS: sticky nav, animated accents, glass cards, responsive grid, and a no‑JS gallery. Perfect quick demo to impress (and to unlock sudo 😉).</p>
+      <div class="hero-actions">
+        <a class="btn primary" href="#features">Explore Features</a>
+        <a class="btn" href="#gallery">See Gallery</a>
+      </div>
+    </div>
+  </section>
+
+  <section id="features">
+    <div class="container">
+      <div class="grid">
+        <article class="card">
+          <div class="icon" aria-hidden="true">💎</div>
+          <h3>Glass Cards</h3>
+          <p>Frosted backgrounds with subtle borders and shadows—clean and premium feel.</p>
+        </article>
+        <article class="card">
+          <div class="icon" aria-hidden="true">📱</div>
+          <h3>Responsive Grid</h3>
+          <p>12‑column CSS Grid that adapts beautifully from mobile to desktop.</p>
+        </article>
+        <article class="card">
+          <div class="icon" aria-hidden="true">⚡</div>
+          <h3>Zero JavaScript</h3>
+          <p>Everything you see is pure HTML + CSS. Lightweight and fast.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section id="gallery">
+    <div class="container">
+      <div class="cta-block" style="margin-bottom: 18px;">
+        <h2 style="margin: 0 0 8px;">Mini Gallery</h2>
+        <p style="margin: 0; color: var(--muted);">Abstract placeholders using gradients—replace with your screenshots later.</p>
+      </div>
+
+      <div class="gallery">
+        <div class="shot"><div></div></div>
+        <div class="shot"><div></div></div>
+        <div class="shot"><div></div></div>
+        <div class="shot"><div></div></div>
+        <div class="shot"><div></div></div>
+        <div class="shot"><div></div></div>
+        <div class="shot"><div></div></div>
+        <div class="shot"><div></div></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="contact">
+    <div class="container">
+      <div class="cta-block">
+        <h2 style="margin:0 0 10px;">Like it? Say hi! 👋</h2>
+        <p style="margin:0 0 16px; color: var(--muted);">This is a dummy contact area. Replace with a real form later.</p>
+        <a class="btn primary" href="#">Download .zip</a>
+        <a class="btn" href="#">View Source</a>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="container">Made with ❤️ by Aaradhya • CSS‑Only Demo</div>
+  </footer>
+</body>
+</html>
